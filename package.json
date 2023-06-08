@@ -1,0 +1,19 @@
+{
+  "name": "msapps",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/NoamRivlin/msapps.git",
+  "scripts": {
+    "server": "nodemon backend/server.js",
+    "client": "cd client yarn run start ",
+    "dev": "concurrently \"yarn run server\" \"yarn run client\"",
+    "install-all": "cd client && yarn install && cd ../server && yarn install"
+  },
+  "author": "Noam Rivlin <noam.rivlin15@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^8.1.0",
+    "nodemon": "^2.0.22"
+  },
+  "dependencies": {}
+}
