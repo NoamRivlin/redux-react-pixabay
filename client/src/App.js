@@ -4,11 +4,27 @@ import axios from 'axios';
 import { Box, Modal, Button, Typography, Fade, Backdrop } from '@mui/material';
 
 
+const modalStyle = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  bgcolor: '#0987A0 ',
+  borderRadius: '4px',
+  boxShadow: 24,
+  p: 5,
+  display: 'flex',
+  justifyContent: 'space-between',
+};
+
 function App() {
 
   const [images, setImages] = useState([]);
   const [page, setPage] = useState(1);
-  const [open, setOpen] = useState(false);
+  const [categoryModalOpen, setCategoryModalOpen] = useState(false);
+  // to keep track of which image modal is open 
+  const [imageModalOpen, setImageModalOpen] = useState(false);
   // initial state of category is nature because there's NSFW images in the other categories
   const [category, setCategory] = useState('nature');
 
@@ -44,19 +60,7 @@ function App() {
   };
 
 
-  const style = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: 400,
-    bgcolor: '#0987A0 ',
-    border: '2px solid #000',
-    boxShadow: 24,
-    p: 4,
-    display: 'flex',
-    justifyContent: 'space-between',
-  };
+
 
 
   if (images.length === 9) {
@@ -64,10 +68,10 @@ function App() {
       < >
         <Box className='container'>
           <Box className='category-modal-container' mt={2}>
-            <Button onClick={() => setOpen(true)} variant='contained' >Choose Category</Button>
+            <Button onClick={() => setCategoryModalOpen(true)} variant='contained' >Choose Category</Button>
             <Modal
-              open={open}
-              onClose={() => setOpen(false)}
+              open={categoryModalOpen}
+              onClose={() => setCategoryModalOpen(false)}
               closeAfterTransition
               slots={{ backdrop: Backdrop }}
               slotProps={{
@@ -76,9 +80,9 @@ function App() {
                 },
               }}
             >
-              <Fade in={open}>
+              <Fade in={categoryModalOpen}>
                 {/* className='category-btn-container' */}
-                <Box sx={style} >
+                <Box sx={modalStyle} >
                   <Button onClick={() => setCategory('sport')} variant='contained' >Sport</Button>
                   <Button onClick={() => setCategory('nature')} variant='contained' >Nature</Button>
                   <Button onClick={() => setCategory('animals')} variant='contained' >Animals</Button>
@@ -89,8 +93,44 @@ function App() {
           </Box>
           <Box className='image-container' mt={2}>
             {/* Display the fetched images */}
-            {images.map((image) => (
-              <img key={image.id} src={image.webformatURL} alt={image.title} className='image' />
+            {images.map((image, index) => (
+              <Button variant='outlined' onClick={() => setImageModalOpen(image.id)} key={image.id}>
+                <img key={image.id} src={image.webformatURL} alt={image.title} className='image' />
+
+                <Modal
+                  key={index}
+                  open={imageModalOpen === image.id}
+                  onClose={() => setImageModalOpen(false)}
+                  closeAfterTransition
+                  slots={{ backdrop: Backdrop }}
+                  slotProps={{
+                    backdrop: {
+                      timeout: 500,
+
+                    },
+                  }}
+                >
+                  <Fade in={imageModalOpen === image.id}>
+                    {/* className='category-btn-container' */}
+                    <Box sx={modalStyle} >
+                      <p>
+                        tags: {image.tags}
+                        <br />
+                        Views: {image.views}
+                        <br />
+                        Likes: {image.likes}
+                        <br />
+                        Number of comments {image.comments}
+                        <br />
+                        Number of downloads: {image.downloads}
+                        <br />
+                        Image URL: {image.pageURL}
+                      </p>
+                    </Box>
+                  </Fade>
+                </Modal>
+
+              </Button>
             ))}
 
           </Box>
