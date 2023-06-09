@@ -1,9 +1,9 @@
 import { configureStore } from '@reduxjs/toolkit';
-import preloadReducer from './features/preload/preloadSlice';
+// import preloadReducer from './features/preload/preloadSlice';
 
 const store = configureStore({
     reducer: {
-        preload: preloadReducer,
+        // preload: preloadReducer,
 
     },
 });
