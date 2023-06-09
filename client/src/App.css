@@ -17,13 +17,11 @@ body {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   gap: 20px;
-  /* width: 20vw; */
 }
 
 .image {
   width: 250px;
   height: 250px;
-  /* Maintain the aspect ratio and crop the image if needed */
   object-fit: cover;
 }
 

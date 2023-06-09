@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import './App.css';
 import axios from 'axios';
-import { Box, Modal, Button } from '@mui/material';
+import { Box, Modal, Button, Typography, Fade, Backdrop } from '@mui/material';
 
 
 function App() {
@@ -23,33 +23,40 @@ function App() {
     (async () => {
       await fetchImages();
     })();
-  }, [page]);
+  }, [page, category]);
 
   const fetchImages = async () => {
     try {
       const response = await axios.get('http://localhost:5000/api/gallery/', {
         params: {
           page,
-          category
+          q: category
         }
 
       });
       const fetchedImages = response.data;
+      console.log('category', category);
       setImages(fetchedImages);
+
     } catch (error) {
       console.error('Failed to fetch images: ', error);
     }
   };
 
-  const handleNextPage = () => {
-    setPage(page + 1);
-  };
-  const handlePreviousPage = () => {
-    setPage(page - 1);
-  };
 
-  // const handleOpen = () => setOpen(true);
-  // const handleClose = () => setOpen(false);
+  const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 400,
+    bgcolor: '#0987A0 ',
+    border: '2px solid #000',
+    boxShadow: 24,
+    p: 4,
+    display: 'flex',
+    justifyContent: 'space-between',
+  };
 
 
   if (images.length === 9) {
@@ -57,8 +64,28 @@ function App() {
       < >
         <Box className='container'>
           <Box className='category-modal-container' mt={2}>
-            {/* <Button onClick={handleNextPage} variant='contained' >Choose Category</Button> */}
-            asd
+            <Button onClick={() => setOpen(true)} variant='contained' >Choose Category</Button>
+            <Modal
+              open={open}
+              onClose={() => setOpen(false)}
+              closeAfterTransition
+              slots={{ backdrop: Backdrop }}
+              slotProps={{
+                backdrop: {
+                  timeout: 500,
+                },
+              }}
+            >
+              <Fade in={open}>
+                {/* className='category-btn-container' */}
+                <Box sx={style} >
+                  <Button onClick={() => setCategory('sport')} variant='contained' >Sport</Button>
+                  <Button onClick={() => setCategory('nature')} variant='contained' >Nature</Button>
+                  <Button onClick={() => setCategory('animals')} variant='contained' >Animals</Button>
+                  <Button onClick={() => setCategory('work')} variant='contained' >Work</Button>
+                </Box>
+              </Fade>
+            </Modal>
           </Box>
           <Box className='image-container' mt={2}>
             {/* Display the fetched images */}
@@ -70,8 +97,8 @@ function App() {
           {/* Pagination controls */}
           <Box className='pagination' mt={2}>
             {/* Disable previous page button if we are on the first page */}
-            <Button onClick={handlePreviousPage} disabled={page === 1} variant='contained' >Previous</Button>
-            <Button onClick={handleNextPage} variant='contained' >Next</Button>
+            <Button onClick={() => setPage(page - 1)} disabled={page === 1} variant='contained' >Previous</Button>
+            <Button onClick={() => setPage(page + 1)} variant='contained' >Next</Button>
           </Box>
         </Box>
       </>
