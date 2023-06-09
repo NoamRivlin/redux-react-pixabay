@@ -71,7 +71,11 @@ function App() {
             <Button onClick={() => setCategoryModalOpen(true)} variant='contained' >Choose Category</Button>
             <Modal
               open={categoryModalOpen}
-              onClose={() => setCategoryModalOpen(false)}
+              onClose={() => {
+                setCategoryModalOpen(false)
+                console.log(categoryModalOpen);
+                return
+              }}
               closeAfterTransition
               slots={{ backdrop: Backdrop }}
               slotProps={{
@@ -100,7 +104,10 @@ function App() {
                 <Modal
                   key={index}
                   open={imageModalOpen === image.id}
-                  onClose={() => setImageModalOpen(false)}
+                  onClose={() => {
+                    console.log(imageModalOpen);
+                    return setImageModalOpen(false)
+                  }}
                   closeAfterTransition
                   slots={{ backdrop: Backdrop }}
                   slotProps={{
