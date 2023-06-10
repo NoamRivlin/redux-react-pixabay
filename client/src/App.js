@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import './App.css';
 import axios from 'axios';
-import { Box, Modal, Button, Typography, Fade, Backdrop } from '@mui/material';
+import { Box, Modal, Button, Fade, Backdrop } from '@mui/material';
 
 
 const modalStyle = {
@@ -9,12 +9,13 @@ const modalStyle = {
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: 400,
+  width: 600,
   bgcolor: '#0987A0 ',
   borderRadius: '4px',
   boxShadow: 24,
   p: 5,
   display: 'flex',
+  gap: '10px',
   justifyContent: 'space-between',
 };
 
@@ -51,16 +52,13 @@ function App() {
 
       });
       const fetchedImages = response.data;
-      console.log('category', category);
+
       setImages(fetchedImages);
 
     } catch (error) {
       console.error('Failed to fetch images: ', error);
     }
   };
-
-
-
 
 
   if (images.length === 9) {
@@ -74,7 +72,6 @@ function App() {
               onClose={() => {
                 setCategoryModalOpen(false)
                 console.log(categoryModalOpen);
-                return
               }}
               closeAfterTransition
               slots={{ backdrop: Backdrop }}
@@ -85,7 +82,6 @@ function App() {
               }}
             >
               <Fade in={categoryModalOpen}>
-                {/* className='category-btn-container' */}
                 <Box sx={modalStyle} >
                   <Button onClick={() => setCategory('sport')} variant='contained' >Sport</Button>
                   <Button onClick={() => setCategory('nature')} variant='contained' >Nature</Button>
@@ -101,12 +97,13 @@ function App() {
               <Button variant='outlined' onClick={() => setImageModalOpen(image.id)} key={image.id}>
                 <img key={image.id} src={image.webformatURL} alt={image.title} className='image' />
 
-                <Modal
+                {/* <Modal
                   key={index}
                   open={imageModalOpen === image.id}
                   onClose={() => {
                     console.log(imageModalOpen);
-                    return setImageModalOpen(false)
+                    setImageModalOpen(false)
+                    return
                   }}
                   closeAfterTransition
                   slots={{ backdrop: Backdrop }}
@@ -116,11 +113,13 @@ function App() {
 
                     },
                   }}
-                >
-                  <Fade in={imageModalOpen === image.id}>
-                    {/* className='category-btn-container' */}
-                    <Box sx={modalStyle} >
+                > */}
+                {/* <Fade in={imageModalOpen === image.id}> */}
+                {/* className='category-btn-container' */}
+                {/* <Box sx={modalStyle} p={3}> */}
+                {/* <img key={image.id} src={image.previewURL} alt={image.title} className='image' />
                       <p>
+
                         tags: {image.tags}
                         <br />
                         Views: {image.views}
@@ -135,7 +134,7 @@ function App() {
                       </p>
                     </Box>
                   </Fade>
-                </Modal>
+                </Modal> */}
 
               </Button>
             ))}

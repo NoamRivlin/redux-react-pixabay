@@ -3,15 +3,15 @@ const router = express.Router()
 
 const {
     fetchPhotos,
-    fetchPhotosByCategory,
+    // fetchPhotosByCategory,
     fetchPhotoById,
-    fetchPhotoByDate,
+    fetchPhotosByPage
 } = require('../controllers/galleryControllers/galleryController')
 
 
 router.route('/').get(fetchPhotos)
-router.route('/:category').get(fetchPhotosByCategory)
-router.route('/:id').get(fetchPhotoById)
-router.route('/:date').get(fetchPhotoByDate)
+router.route('/id=:id').get(fetchPhotoById)
+router.route('/page_number=:pageNumber').get(fetchPhotosByPage)
+
 
 module.exports = router
