@@ -17,6 +17,16 @@ const categoryModalStyle = {
 
 }
 
+const imageModalStyle = {
+  bgcolor: '#0987A0 ',
+  borderRadius: '4px',
+  display: 'flex',
+  alignItems: 'center',
+  p: 5,
+  gap: '10px',
+  justifyContent: 'space-between',
+}
+
 function App() {
 
 
@@ -52,7 +62,6 @@ function App() {
           q: category
         }
       });
-      // const response = await axios.get(`http://localhost:5000/api/gallery/`)
       console.log('response.params', response.path);
       const fetchedImages = response.data;
       setImages(fetchedImages);
@@ -89,15 +98,7 @@ function App() {
                 <Dialog open={imageModalOpen === image.id} onClose={() => {
                   setImageModalOpen(false)
                 }} maxWidth={'lg'} >
-                  <DialogContent sx={{
-                    bgcolor: '#0987A0 ',
-                    borderRadius: '4px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    p: 5,
-                    gap: '10px',
-                    justifyContent: 'space-between',
-                  }}
+                  <DialogContent sx={imageModalStyle}
                   >
                     <img src={image.webformatURL} alt={image.title} className='image' />
                     <p>
@@ -121,7 +122,6 @@ function App() {
             ))}
           </Box>
 
-          {/* Pagination controls */}
           <Box className='pagination' mt={2}>
             {/* Disable previous page button if we are on the first page */}
             <Button onClick={() => setPageNumber(pageNumber - 1)} disabled={pageNumber === 1} variant='contained' >Previous</Button>
