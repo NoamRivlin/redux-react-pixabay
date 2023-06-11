@@ -6,15 +6,7 @@ const ITEMS_PER_PAGE = 9;
 
 const fetchPhotos = async (req, res) => {
     try {
-        let { page, q } = req.query;
-
-        // const { data } = await axios.get(API_URL, {
-        //     params: {
-        //         page,
-        //         per_page: ITEMS_PER_PAGE,
-        //         q,
-        //     }
-        // });
+        const { page, q } = req.query;
         const { data } = await axios.get(`${API_URL}&page=${page}&per_page=${ITEMS_PER_PAGE}&q=${q}`)
         const imageObjects = data.hits
         res.status(200).json(imageObjects);
