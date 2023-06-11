@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import './App.css';
 import axios from 'axios';
-import { Box, Button, Dialog, DialogContent } from '@mui/material';
+import { Box, Button, Dialog, DialogContent, Typography } from '@mui/material';
 
 
 
@@ -62,7 +62,6 @@ function App() {
           q: category
         }
       });
-      console.log('response.params', response.path);
       const fetchedImages = response.data;
       setImages(fetchedImages);
 
@@ -76,7 +75,7 @@ function App() {
     return (
       < >
         <Box className='container'>
-          <Box className='category-modal-container' mt={2}>
+          <Box className='category-modal-container' mt={1}>
             <Button onClick={() => setCategoryModalOpen(true)} variant='contained' >Choose Category</Button>
             <Dialog open={categoryModalOpen} onClose={() => setCategoryModalOpen(false)} maxWidth={'lg'}>
               <DialogContent sx={categoryModalStyle}  >
@@ -87,17 +86,15 @@ function App() {
             </Dialog>
           </Box>
 
-          <Box className='image-container' mt={2} >
+          <Box className='image-container' mt={1} >
             {/* Display the fetched images */}
             {images.map((image, index) => (
               <Box key={image.id}>
-                <Button variant='outlined' onClick={() => setImageModalOpen(image.id)} key={image.id}>
+                <Button variant='outlined' onClick={() => setImageModalOpen(image.id)} >
                   <img src={image.webformatURL} alt={image.title} className='image' />
                 </Button>
 
-                <Dialog open={imageModalOpen === image.id} onClose={() => {
-                  setImageModalOpen(false)
-                }} maxWidth={'lg'} >
+                {/* <Dialog open={imageModalOpen === image.id} onClose={() => setImageModalOpen(false)} maxWidth={'lg'} >
                   <DialogContent sx={imageModalStyle}
                   >
                     <img src={image.webformatURL} alt={image.title} className='image' />
@@ -116,13 +113,13 @@ function App() {
                       Image URL: {image.pageURL}
                     </p>
                   </DialogContent>
-                </Dialog>
+                </Dialog> */}
               </Box>
 
             ))}
           </Box>
 
-          <Box className='pagination' mt={2}>
+          <Box className='pagination' mt={2} >
             {/* Disable previous page button if we are on the first page */}
             <Button onClick={() => setPageNumber(pageNumber - 1)} disabled={pageNumber === 1} variant='contained' >Previous</Button>
             <Button onClick={() => setPageNumber(pageNumber + 1)} variant='contained' >Next</Button>
@@ -133,8 +130,8 @@ function App() {
     );
   } else {
     return (
-      <div>
-        <h1>Loading...</h1>
+      <div >
+        <Typography variant='h1' color={'white'} >Loading...</Typography>
       </div>
     );
   }
