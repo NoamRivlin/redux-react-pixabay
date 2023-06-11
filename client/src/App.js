@@ -1,33 +1,33 @@
 import { useEffect, useState } from 'react';
 import './App.css';
 import axios from 'axios';
-import { Box, Modal, Button, Fade, Backdrop } from '@mui/material';
+import { Box, Button, Dialog, DialogContent } from '@mui/material';
 
 
-const modalStyle = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: 600,
+
+const categoryModalStyle = {
   bgcolor: '#0987A0 ',
   borderRadius: '4px',
-  boxShadow: 24,
   p: 5,
+  gap: '15px',
   display: 'flex',
-  gap: '10px',
-  justifyContent: 'space-between',
-};
+  flexWrap: 'wrap',
+  alignItems: 'center',
+  height: '100%',
+
+}
 
 function App() {
 
+
   const [images, setImages] = useState([]);
-  const [page, setPage] = useState(1);
+  const [pageNumber, setPageNumber] = useState(1);
   const [categoryModalOpen, setCategoryModalOpen] = useState(false);
   // to keep track of which image modal is open 
   const [imageModalOpen, setImageModalOpen] = useState(false);
   // initial state of category is nature because there's NSFW images in the other categories
   const [category, setCategory] = useState('nature');
+  const categories = ['sport', 'nature', 'animals', 'work', 'food', 'travel', 'music', 'science', 'education', 'health', 'people', 'religion', 'industry', 'computer', 'buildings', 'business', 'backgrounds', 'places', 'feelings', 'animals', 'plants', 'transportation', 'travel', 'religion', 'science', 'education', 'feelings', 'health', 'people', 'industry', 'computer', 'food', 'sports', 'transportation', 'buildings', 'business', 'music'];
 
 
   useEffect(() => {
@@ -39,20 +39,22 @@ function App() {
   useEffect(() => {
     (async () => {
       await fetchImages();
+
     })();
-  }, [page, category]);
+
+  }, [pageNumber, category]);
 
   const fetchImages = async () => {
     try {
       const response = await axios.get('http://localhost:5000/api/gallery/', {
         params: {
-          page,
+          page: pageNumber,
           q: category
         }
-
       });
+      // const response = await axios.get(`http://localhost:5000/api/gallery/`)
+      console.log('response.params', response.path);
       const fetchedImages = response.data;
-
       setImages(fetchedImages);
 
     } catch (error) {
@@ -67,86 +69,66 @@ function App() {
         <Box className='container'>
           <Box className='category-modal-container' mt={2}>
             <Button onClick={() => setCategoryModalOpen(true)} variant='contained' >Choose Category</Button>
-            <Modal
-              open={categoryModalOpen}
-              onClose={() => {
-                setCategoryModalOpen(false)
-                console.log(categoryModalOpen);
-              }}
-              closeAfterTransition
-              slots={{ backdrop: Backdrop }}
-              slotProps={{
-                backdrop: {
-                  timeout: 500,
-                },
-              }}
-            >
-              <Fade in={categoryModalOpen}>
-                <Box sx={modalStyle} >
-                  <Button onClick={() => setCategory('sport')} variant='contained' >Sport</Button>
-                  <Button onClick={() => setCategory('nature')} variant='contained' >Nature</Button>
-                  <Button onClick={() => setCategory('animals')} variant='contained' >Animals</Button>
-                  <Button onClick={() => setCategory('work')} variant='contained' >Work</Button>
-                </Box>
-              </Fade>
-            </Modal>
+            <Dialog open={categoryModalOpen} onClose={() => setCategoryModalOpen(false)} maxWidth={'lg'}>
+              <DialogContent sx={categoryModalStyle}  >
+                {categories.map((category, index) => (
+                  <Button onClick={() => setCategory(category)} variant='contained' key={index}>{category}</Button>
+                ))}
+              </DialogContent>
+            </Dialog>
           </Box>
-          <Box className='image-container' mt={2}>
+
+          <Box className='image-container' mt={2} >
             {/* Display the fetched images */}
             {images.map((image, index) => (
-              <Button variant='outlined' onClick={() => setImageModalOpen(image.id)} key={image.id}>
-                <img key={image.id} src={image.webformatURL} alt={image.title} className='image' />
+              <Box key={image.id}>
+                <Button variant='outlined' onClick={() => setImageModalOpen(image.id)} key={image.id}>
+                  <img src={image.webformatURL} alt={image.title} className='image' />
+                </Button>
 
-                {/* <Modal
-                  key={index}
-                  open={imageModalOpen === image.id}
-                  onClose={() => {
-                    console.log(imageModalOpen);
-                    setImageModalOpen(false)
-                    return
+                <Dialog open={imageModalOpen === image.id} onClose={() => {
+                  setImageModalOpen(false)
+                }} maxWidth={'lg'} >
+                  <DialogContent sx={{
+                    bgcolor: '#0987A0 ',
+                    borderRadius: '4px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    p: 5,
+                    gap: '10px',
+                    justifyContent: 'space-between',
                   }}
-                  closeAfterTransition
-                  slots={{ backdrop: Backdrop }}
-                  slotProps={{
-                    backdrop: {
-                      timeout: 500,
+                  >
+                    <img src={image.webformatURL} alt={image.title} className='image' />
+                    <p>
 
-                    },
-                  }}
-                > */}
-                {/* <Fade in={imageModalOpen === image.id}> */}
-                {/* className='category-btn-container' */}
-                {/* <Box sx={modalStyle} p={3}> */}
-                {/* <img key={image.id} src={image.previewURL} alt={image.title} className='image' />
-                      <p>
+                      tags: {image.tags}
+                      <br />
+                      Views: {image.views}
+                      <br />
+                      Likes: {image.likes}
+                      <br />
+                      Number of comments {image.comments}
+                      <br />
+                      Number of downloads: {image.downloads}
+                      <br />
+                      Image URL: {image.pageURL}
+                    </p>
+                  </DialogContent>
+                </Dialog>
+              </Box>
 
-                        tags: {image.tags}
-                        <br />
-                        Views: {image.views}
-                        <br />
-                        Likes: {image.likes}
-                        <br />
-                        Number of comments {image.comments}
-                        <br />
-                        Number of downloads: {image.downloads}
-                        <br />
-                        Image URL: {image.pageURL}
-                      </p>
-                    </Box>
-                  </Fade>
-                </Modal> */}
-
-              </Button>
             ))}
-
           </Box>
+
           {/* Pagination controls */}
           <Box className='pagination' mt={2}>
             {/* Disable previous page button if we are on the first page */}
-            <Button onClick={() => setPage(page - 1)} disabled={page === 1} variant='contained' >Previous</Button>
-            <Button onClick={() => setPage(page + 1)} variant='contained' >Next</Button>
+            <Button onClick={() => setPageNumber(pageNumber - 1)} disabled={pageNumber === 1} variant='contained' >Previous</Button>
+            <Button onClick={() => setPageNumber(pageNumber + 1)} variant='contained' >Next</Button>
           </Box>
-        </Box>
+
+        </Box >
       </>
     );
   } else {
