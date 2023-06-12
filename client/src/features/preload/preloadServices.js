@@ -1,4 +1,0 @@
-// const fetchPreloadData = () => {
-// };
-
-// export { fetchPreloadData };
