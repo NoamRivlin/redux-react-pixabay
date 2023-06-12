@@ -11,7 +11,9 @@ const categoryModalStyle = {
     height: '100%',
 }
 
-const CategoryModal = ({ categories, categoryModalOpen, setCategoryModalOpen, setCategory }) => {
+const categories = ['Nature', 'Backgrounds', 'Fashion', 'Science', 'Education', 'Feelings', 'Health', 'People', 'Religion', 'Places', 'Animals', 'Industry', 'Computer', 'Food', 'Sports', 'Transportation', 'Travel', 'Buildings', 'Business']
+
+const CategoryModal = ({ categoryModalOpen, setCategoryModalOpen, setCategory }) => {
     return (<Dialog open={categoryModalOpen}
         onClose={() => setCategoryModalOpen(false)}
         maxWidth={'lg'}>

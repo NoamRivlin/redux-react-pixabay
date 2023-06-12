@@ -18,6 +18,14 @@ body {
   height: 100vh;
 }
 
+.category-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+}
+
 .image-container {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
