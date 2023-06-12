@@ -1,47 +1,44 @@
-import { Backdrop, Box, Button, Fade } from "@mui/material"
-
-
-
-const modalStyle = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: 400,
+import { Dialog, DialogContent } from '@mui/material';
+const imageModalStyle = {
     bgcolor: '#0987A0 ',
     borderRadius: '4px',
-    boxShadow: 24,
-    p: 5,
     display: 'flex',
+    alignItems: 'center',
+    p: 5,
+    gap: '10px',
     justifyContent: 'space-between',
-};
-
-
-export const Modal = ({ open, setOpen, }) => {
-    return (
-        <>
-            <Box className='category-modal-container' mt={2}>
-                <Button onClick={() => setOpen(true)} variant='contained' >Choose Category</Button>
-                <Modal
-                    open={open}
-                    onClose={() => setOpen(false)}
-                    closeAfterTransition
-                    slots={{ backdrop: Backdrop }}
-                    slotProps={{
-                        backdrop: {
-                            timeout: 500,
-                        },
-                    }}
-                >
-                    <Fade in={open}>
-                        {/* className='category-btn-container' */}
-                        <Box sx={modalStyle} >
-
-
-                        </Box>
-                    </Fade>
-                </Modal>
-            </Box>
-        </>
-    )
+    color: 'lightblue',
+    fontWeight: 'bold',
 }
+
+const ModalByImageId = ({ images, modalId, imageModalOpen, setImageModalOpen }) => {
+    const image = images.find((image) => image.id === modalId);
+    if (image) {
+        return (
+            <Dialog open={imageModalOpen} onClose={() =>
+                setImageModalOpen(false)
+            } maxWidth={'lg'} >
+                <DialogContent sx={imageModalStyle}
+                >
+                    <img src={image.webformatURL} alt={image.title} className='image' />
+                    <p >
+
+                        tags: {image.tags}
+                        <br />
+                        Views: {image.views}
+                        <br />
+                        Likes: {image.likes}
+                        <br />
+                        Number of comments {image.comments}
+                        <br />
+                        Number of downloads: {image.downloads}
+                        <br />
+                        Image URL: {image.pageURL}
+                    </p>
+                </DialogContent>
+            </Dialog>
+        )
+    }
+
+}
+export default ModalByImageId;

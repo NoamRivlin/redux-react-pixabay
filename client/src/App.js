@@ -1,31 +1,12 @@
 import { useEffect, useState } from 'react';
 import './App.css';
 import axios from 'axios';
-import { Box, Button, Dialog, DialogContent, Typography } from '@mui/material';
+import { Box, Button, Typography } from '@mui/material';
+import ModalByImageId from './components/ImageModal';
+import CategoryModal from './components/CategoryModal';
 
 
 
-const categoryModalStyle = {
-  bgcolor: '#0987A0 ',
-  borderRadius: '4px',
-  p: 5,
-  gap: '15px',
-  display: 'flex',
-  flexWrap: 'wrap',
-  alignItems: 'center',
-  height: '100%',
-
-}
-
-const imageModalStyle = {
-  bgcolor: '#0987A0 ',
-  borderRadius: '4px',
-  display: 'flex',
-  alignItems: 'center',
-  p: 5,
-  gap: '10px',
-  justifyContent: 'space-between',
-}
 
 function App() {
 
@@ -35,16 +16,12 @@ function App() {
   const [categoryModalOpen, setCategoryModalOpen] = useState(false);
   // to keep track of which image modal is open 
   const [imageModalOpen, setImageModalOpen] = useState(false);
+  const [modalId, setModalId] = useState(null);
   // initial state of category is nature because there's NSFW images in the other categories
   const [category, setCategory] = useState('nature');
   const categories = ['sport', 'nature', 'animals', 'work', 'food', 'travel', 'music', 'science', 'education', 'health', 'people', 'religion', 'industry', 'computer', 'buildings', 'business', 'backgrounds', 'places', 'feelings', 'animals', 'plants', 'transportation', 'travel', 'religion', 'science', 'education', 'feelings', 'health', 'people', 'industry', 'computer', 'food', 'sports', 'transportation', 'buildings', 'business', 'music'];
 
 
-  useEffect(() => {
-    (async () => {
-      await fetchImages();
-    })();
-  }, []);
 
   useEffect(() => {
     (async () => {
@@ -71,71 +48,44 @@ function App() {
   };
 
 
-  if (images.length === 9) {
-    return (
-      < >
-        <Box className='container'>
-          <Box className='category-modal-container' mt={1}>
-            <Button onClick={() => setCategoryModalOpen(true)} variant='contained' >Choose Category</Button>
-            <Dialog open={categoryModalOpen} onClose={() => setCategoryModalOpen(false)} maxWidth={'lg'}>
-              <DialogContent sx={categoryModalStyle}  >
-                {categories.map((category, index) => (
-                  <Button onClick={() => setCategory(category)} variant='contained' key={index}>{category}</Button>
-                ))}
-              </DialogContent>
-            </Dialog>
-          </Box>
 
-          <Box className='image-container' mt={1} >
-            {/* Display the fetched images */}
-            {images.map((image, index) => (
-              <Box key={image.id}>
-                <Button variant='outlined' onClick={() => setImageModalOpen(image.id)} >
-                  <img src={image.webformatURL} alt={image.title} className='image' />
-                </Button>
 
-                {/* <Dialog open={imageModalOpen === image.id} onClose={() => setImageModalOpen(false)} maxWidth={'lg'} >
-                  <DialogContent sx={imageModalStyle}
-                  >
-                    <img src={image.webformatURL} alt={image.title} className='image' />
-                    <p>
+  return (
+    < >
+      <Box className='container'>
+        <Box className='category-modal-container' mt={1}>
+          <Button onClick={() => setCategoryModalOpen(true)} variant='contained' >Choose Category</Button>
+          <CategoryModal categories={categories} setCategory={setCategory} categoryModalOpen={categoryModalOpen} setCategoryModalOpen={setCategoryModalOpen} />
+        </Box>
 
-                      tags: {image.tags}
-                      <br />
-                      Views: {image.views}
-                      <br />
-                      Likes: {image.likes}
-                      <br />
-                      Number of comments {image.comments}
-                      <br />
-                      Number of downloads: {image.downloads}
-                      <br />
-                      Image URL: {image.pageURL}
-                    </p>
-                  </DialogContent>
-                </Dialog> */}
-              </Box>
+        <Box className='image-container' mt={1} >
+          {/* Display the fetched images */}
+          {images.length === 9 ? (images.map((image) => (
+            <Box key={image.id}>
+              <Button variant='outlined' onClick={() => {
+                setModalId(image.id)
+                setImageModalOpen(true)
+              }} >
+                <img src={image.webformatURL} alt={image.title} className='image' />
+              </Button>
+            </Box>
 
-            ))}
-          </Box>
+          ))) : (<Typography variant='h2' color={'white'} >Loading...</Typography>)}
+        </Box>
 
-          <Box className='pagination' mt={2} >
-            {/* Disable previous page button if we are on the first page */}
-            <Button onClick={() => setPageNumber(pageNumber - 1)} disabled={pageNumber === 1} variant='contained' >Previous</Button>
-            <Button onClick={() => setPageNumber(pageNumber + 1)} variant='contained' >Next</Button>
-          </Box>
+        <ModalByImageId images={images} modalId={modalId} imageModalOpen={imageModalOpen} setImageModalOpen={setImageModalOpen} />
+        <Box className='pagination' mt={2} >
 
-        </Box >
-      </>
-    );
-  } else {
-    return (
-      <div >
-        <Typography variant='h1' color={'white'} >Loading...</Typography>
-      </div>
-    );
-  }
+          {/* Disable previous page button if we are on the first page */}
+          <Button onClick={() => setPageNumber(pageNumber - 1)} disabled={pageNumber === 1} variant='contained' >Previous</Button>
+          <Button onClick={() => setPageNumber(pageNumber + 1)} variant='contained' >Next</Button>
+        </Box>
 
-};
+      </Box >
+    </>
+  );
+
+}
+
 
 export default App;

@@ -30,6 +30,7 @@ body {
   object-fit: cover;
 }
 
+
 .pagination {
   display: flex;
   flex-direction: row;

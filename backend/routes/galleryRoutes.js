@@ -3,7 +3,6 @@ const router = express.Router()
 
 const {
     fetchPhotos,
-    // fetchPhotosByCategory,
     fetchPhotoById,
     fetchPhotosByPage
 } = require('../controllers/galleryControllers/galleryController')
@@ -11,7 +10,7 @@ const {
 
 router.route('/').get(fetchPhotos)
 router.route('/id/:id').get(fetchPhotoById)
-router.route('/page_number/:pageNumber').get(fetchPhotosByPage)
+router.route('/page/:pageNumber').get(fetchPhotosByPage)
 
 
 module.exports = router
