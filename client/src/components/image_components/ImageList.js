@@ -1,11 +1,11 @@
 import { Box, Button, Typography } from '@mui/material';
-
-function ImageList({ images, onImageClick, isLoading, error }) {
+import "./style.css";
+const ImageList = ({ images, onImageClick, isLoading, error }) => {
     return (
         <Box className='image-container' mt={1}>
             {isLoading ? (
                 // make it so that the loading text is centered and takes up the same space as the images
-                <Box sx={{ height: '600px', display: 'flex', alignItems: 'center', justifyContent: 'flex-start' }}>
+                <Box sx={{ height: '600px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     <Typography variant='h2' color='white' >Loading...</Typography>
                 </Box>
             ) : error ? (

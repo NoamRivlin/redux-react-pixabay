@@ -1,5 +1,5 @@
 import { Box, Button, Typography } from '@mui/material';
-
+import "./style.css";
 
 
 const Pagination = ({ handlePageChange, pageNumber }) => {

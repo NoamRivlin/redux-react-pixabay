@@ -1,23 +1,21 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import './App.css';
-import axios from 'axios';
-import { Box, Button, Typography } from '@mui/material';
-import ModalByImageId from './components/ImageModal';
-import CategoryModal from './components/CategoryModal';
-import ImageList from './components/ImageList';
-import Pagination from './components/Pagination';
-import useImageFetcher from './components/useImageFetcher';
+import { Box, } from '@mui/material';
+import ModalByImageId from './components/image_components/ModalByImageId';
+import ImageList from './components/image_components/ImageList';
+import Pagination from './components/pagination/Pagination';
+import useImageFetcher from './utils/useImageFetcher';
+import Category from './components/category_components/Category';
 
 
 
 
 function App() {
 
-  // const [images, setImages] = useState([]);
   const [pageNumber, setPageNumber] = useState(1);
   const [categoryModalOpen, setCategoryModalOpen] = useState(false);
   const [imageModalOpen, setImageModalOpen] = useState(false);
-  const [modalId, setModalId] = useState(null);
+  const [imageModalId, setImageModalId] = useState(null);
   // initial state of category is nature because there's NSFW images in the other categories
   const [category, setCategory] = useState('Nature');
 
@@ -29,8 +27,8 @@ function App() {
     setPageNumber(newPageNumber);
   };
 
-  const handleModalOpen = (imageId) => {
-    setModalId(imageId);
+  const handleImageModalOpen = (imageId) => {
+    setImageModalId(imageId);
     setImageModalOpen(true);
   };
 
@@ -46,16 +44,13 @@ function App() {
   return (
     < >
       <Box className='container'>
-        <Box className='category-container' mt={1}>
-          <Button onClick={() => handleCategoryModalOpen()} variant='contained' >Choose Category</Button>
-          <Typography variant='h6' color={'white'} >Category: {category}</Typography>
-          <CategoryModal setCategory={handleCategoryChange} categoryModalOpen={categoryModalOpen} setCategoryModalOpen={setCategoryModalOpen} />
-        </Box>
 
-        <ImageList images={images} onImageClick={handleModalOpen} isLoading={isLoading} error={error} />
-        {/* <ImageList images={images} onImageClick={handleModalOpen} isLoading={images.length !== 9} error={!images.length} /> */}
+        <Category handleCategoryModalOpen={handleCategoryModalOpen} handleCategoryChange={handleCategoryChange} category={category} categoryModalOpen={categoryModalOpen} setCategoryModalOpen={setCategoryModalOpen} />
 
-        <ModalByImageId images={images} modalId={modalId} imageModalOpen={imageModalOpen} setImageModalOpen={setImageModalOpen} />
+        <ImageList images={images} onImageClick={handleImageModalOpen} isLoading={isLoading} error={error} />
+
+
+        <ModalByImageId images={images} imageModalId={imageModalId} imageModalOpen={imageModalOpen} setImageModalOpen={setImageModalOpen} />
 
 
         <Pagination handlePageChange={handlePageChange} pageNumber={pageNumber} />

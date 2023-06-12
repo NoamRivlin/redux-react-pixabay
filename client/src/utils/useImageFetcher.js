@@ -3,7 +3,8 @@ import axios from 'axios';
 
 const useImageFetcher = ({ category, pageNumber }) => {
     const [images, setImages] = useState([]);
-    const [isLoading, setIsLoading] = useState(false);
+    // app starts loading before app is rendered, so we set isLoading to true
+    const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
     // const [pageNumber, setPageNumber] = useState(1);
 

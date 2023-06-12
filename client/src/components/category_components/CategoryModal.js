@@ -18,8 +18,8 @@ const CategoryModal = ({ categoryModalOpen, setCategoryModalOpen, setCategory })
         onClose={() => setCategoryModalOpen(false)}
         maxWidth={'lg'}>
         <DialogContent sx={categoryModalStyle}  >
-            {categories && categories.map((category, index) => (
-                <Button onClick={() => setCategory(category)} variant='contained' key={index}>{category}</Button>
+            {categories && categories.map((category) => (
+                <Button onClick={() => setCategory(category)} variant='contained' key={category}>{category}</Button>
             ))}
         </DialogContent>
     </Dialog>)

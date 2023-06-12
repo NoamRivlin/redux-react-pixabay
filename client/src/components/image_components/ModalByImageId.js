@@ -1,4 +1,5 @@
 import { Dialog, DialogContent } from '@mui/material';
+import "./style.css";
 const imageModalStyle = {
     bgcolor: '#0987A0 ',
     borderRadius: '4px',
@@ -7,12 +8,13 @@ const imageModalStyle = {
     p: 5,
     gap: '10px',
     justifyContent: 'space-between',
-    color: 'lightblue',
+    // soft bright color 
+    color: '#BEE3F8',
     fontWeight: 'bold',
 }
 
-const ModalByImageId = ({ images, modalId, imageModalOpen, setImageModalOpen }) => {
-    const image = images.find((image) => image.id === modalId);
+const ModalByImageId = ({ images, imageModalId, imageModalOpen, setImageModalOpen }) => {
+    const image = images.find((image) => image.id === imageModalId);
     if (image) {
         return (
             <Dialog open={imageModalOpen} onClose={() =>
