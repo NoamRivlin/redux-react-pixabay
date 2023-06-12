@@ -19,6 +19,7 @@ function App() {
   const [modalId, setModalId] = useState(null);
   // initial state of category is nature because there's NSFW images in the other categories
   const [category, setCategory] = useState('nature');
+  // all the categories that we can choose from
   const categories = ['sport', 'nature', 'animals', 'work', 'food', 'travel', 'music', 'science', 'education', 'health', 'people', 'religion', 'industry', 'computer', 'buildings', 'business', 'backgrounds', 'places', 'feelings', 'animals', 'plants', 'transportation', 'travel', 'religion', 'science', 'education', 'feelings', 'health', 'people', 'industry', 'computer', 'food', 'sports', 'transportation', 'buildings', 'business', 'music'];
 
 
@@ -26,7 +27,6 @@ function App() {
   useEffect(() => {
     (async () => {
       await fetchImages();
-
     })();
 
   }, [pageNumber, category]);
@@ -47,15 +47,30 @@ function App() {
     }
   };
 
+  const handlePageChange = (newPageNumber) => {
+    setPageNumber(newPageNumber);
+  };
 
+  const handleModalOpen = (imageId) => {
+    setModalId(imageId);
+    setImageModalOpen(true);
+  };
 
+  const handleCategoryModalOpen = () => {
+    setCategoryModalOpen(true);
+  };
+
+  const handleCategoryChange = (newCategory) => {
+    setCategory(newCategory);
+    setPageNumber(1);
+  };
 
   return (
     < >
       <Box className='container'>
         <Box className='category-modal-container' mt={1}>
-          <Button onClick={() => setCategoryModalOpen(true)} variant='contained' >Choose Category</Button>
-          <CategoryModal categories={categories} setCategory={setCategory} categoryModalOpen={categoryModalOpen} setCategoryModalOpen={setCategoryModalOpen} />
+          <Button onClick={() => handleCategoryModalOpen()} variant='contained' >Choose Category</Button>
+          <CategoryModal categories={categories} setCategory={handleCategoryChange} categoryModalOpen={categoryModalOpen} setCategoryModalOpen={setCategoryModalOpen} />
         </Box>
 
         <Box className='image-container' mt={1} >
@@ -63,8 +78,7 @@ function App() {
           {images.length === 9 ? (images.map((image) => (
             <Box key={image.id}>
               <Button variant='outlined' onClick={() => {
-                setModalId(image.id)
-                setImageModalOpen(true)
+                handleModalOpen(image.id);
               }} >
                 <img src={image.webformatURL} alt={image.title} className='image' />
               </Button>
@@ -77,8 +91,9 @@ function App() {
         <Box className='pagination' mt={2} >
 
           {/* Disable previous page button if we are on the first page */}
-          <Button onClick={() => setPageNumber(pageNumber - 1)} disabled={pageNumber === 1} variant='contained' >Previous</Button>
-          <Button onClick={() => setPageNumber(pageNumber + 1)} variant='contained' >Next</Button>
+          <Button onClick={() => handlePageChange(pageNumber - 1)} disabled={pageNumber === 1} variant='contained' >Previous</Button>
+          <Button onClick={() => handlePageChange(pageNumber + 1)} variant='contained' >Next</Button>
+          <Typography variant='h6' color={'white'} >Page {pageNumber}</Typography>
         </Box>
 
       </Box >
