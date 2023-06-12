@@ -9,6 +9,9 @@ import store from './app/store';
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
+// we wrap the App component with the Provider component to make the Redux store available to the App component
+// we pass the store as a prop to the Provider component
+// we wrap the App component with the StrictMode component to check for potential problems
 root.render(
   <React.StrictMode>
     <Provider store={store}>

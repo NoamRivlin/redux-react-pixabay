@@ -1,100 +1,81 @@
 import { useEffect, useState } from 'react';
 import './App.css';
-import axios from 'axios';
-import { Box, Button, Typography } from '@mui/material';
-import ModalByImageId from './components/ImageModal';
-import CategoryModal from './components/CategoryModal';
+import { Box, } from '@mui/material';
+import ModalByImageId from './components/image_components/ModalByImageId';
+import ImageList from './components/image_components/ImageList';
+import Pagination from './components/pagination/Pagination';
+import Category from './components/category_components/Category';
+import { useSelector, useDispatch } from 'react-redux';
+import { setPageNumber, setCategory, fetchImagesAsync } from './features/gallery/gallerySlice';
 
 
 
 
 function App() {
 
+  // we use the useDispatch hook to dispatch actions to the redux store
+  const dispatch = useDispatch();
 
-  const [images, setImages] = useState([]);
-  const [pageNumber, setPageNumber] = useState(1);
+  // state setup 
+  // we use the useState hook to set the state of the category modal and image modal
+  // we pass the state as props to the components that need it
   const [categoryModalOpen, setCategoryModalOpen] = useState(false);
-  // to keep track of which image modal is open 
   const [imageModalOpen, setImageModalOpen] = useState(false);
-  const [modalId, setModalId] = useState(null);
-  // initial state of category is nature because there's NSFW images in the other categories
-  const [category, setCategory] = useState('nature');
-  // all the categories that we can choose from
-  const categories = ['sport', 'nature', 'animals', 'work', 'food', 'travel', 'music', 'science', 'education', 'health', 'people', 'religion', 'industry', 'computer', 'buildings', 'business', 'backgrounds', 'places', 'feelings', 'animals', 'plants', 'transportation', 'travel', 'religion', 'science', 'education', 'feelings', 'health', 'people', 'industry', 'computer', 'food', 'sports', 'transportation', 'buildings', 'business', 'music'];
+  const [imageModalId, setImageModalId] = useState(null);
 
-
-
-  useEffect(() => {
-    (async () => {
-      await fetchImages();
-    })();
-
-  }, [pageNumber, category]);
-
-  const fetchImages = async () => {
-    try {
-      const response = await axios.get('http://localhost:5000/api/gallery/', {
-        params: {
-          page: pageNumber,
-          q: category
-        }
-      });
-      const fetchedImages = response.data;
-      setImages(fetchedImages);
-
-    } catch (error) {
-      console.error('Failed to fetch images: ', error);
-    }
-  };
-
+  // events handlers the change gallery state and trigger useEffect hook to fetch images from the API 
   const handlePageChange = (newPageNumber) => {
-    setPageNumber(newPageNumber);
+    // Updates the current page number in the Redux store
+    dispatch(setPageNumber(newPageNumber))
+  };
+  const handleCategoryChange = (newCategory) => {
+    // Updates the state of category in the Redux store and resets the page number to 1
+    dispatch(setPageNumber(1))
+    dispatch(setCategory(newCategory))
   };
 
-  const handleModalOpen = (imageId) => {
-    setModalId(imageId);
+  // modal handlers
+  const handleImageModalOpen = (imageId) => {
+    // Sets the modal image id to the image id that was clicked on 
+    // so that the modal can display the image that was clicked on
+    setImageModalId(imageId);
+    // opens image modal
     setImageModalOpen(true);
   };
 
   const handleCategoryModalOpen = () => {
+    // opens category modal
     setCategoryModalOpen(true);
   };
 
-  const handleCategoryChange = (newCategory) => {
-    setCategory(newCategory);
-    setPageNumber(1);
-  };
+  // redux state setup 
+  // we destructure the state from the redux store
+  // we use the useSelector hook to get the state from the redux store
+  // we pass the state as props to the components that need it
+
+  const { images, isLoading, error, pageNumber, category } = useSelector((state) => state.gallery);
+
+  //  useEffect hook to fetch images from the API when the page loads and number or category changes 
+  useEffect(() => {
+    // we use the useDispatch hook to dispatch actions to the redux store
+    dispatch(fetchImagesAsync({ pageNumber, category }))
+  }, [pageNumber, category]);
+
+
 
   return (
     < >
       <Box className='container'>
-        <Box className='category-modal-container' mt={1}>
-          <Button onClick={() => handleCategoryModalOpen()} variant='contained' >Choose Category</Button>
-          <CategoryModal categories={categories} setCategory={handleCategoryChange} categoryModalOpen={categoryModalOpen} setCategoryModalOpen={setCategoryModalOpen} />
-        </Box>
+        <Category handleCategoryModalOpen={handleCategoryModalOpen}
+          handleCategoryChange={handleCategoryChange} category={category} categoryModalOpen={categoryModalOpen} setCategoryModalOpen={setCategoryModalOpen} />
 
-        <Box className='image-container' mt={1} >
-          {/* Display the fetched images */}
-          {images.length === 9 ? (images.map((image) => (
-            <Box key={image.id}>
-              <Button variant='outlined' onClick={() => {
-                handleModalOpen(image.id);
-              }} >
-                <img src={image.webformatURL} alt={image.title} className='image' />
-              </Button>
-            </Box>
+        <ImageList images={images} handleImageModalOpen={handleImageModalOpen} isLoading={isLoading} error={error} />
 
-          ))) : (<Typography variant='h2' color={'white'} >Loading...</Typography>)}
-        </Box>
 
-        <ModalByImageId images={images} modalId={modalId} imageModalOpen={imageModalOpen} setImageModalOpen={setImageModalOpen} />
-        <Box className='pagination' mt={2} >
+        <ModalByImageId images={images} imageModalId={imageModalId} imageModalOpen={imageModalOpen} setImageModalOpen={setImageModalOpen} />
 
-          {/* Disable previous page button if we are on the first page */}
-          <Button onClick={() => handlePageChange(pageNumber - 1)} disabled={pageNumber === 1} variant='contained' >Previous</Button>
-          <Button onClick={() => handlePageChange(pageNumber + 1)} variant='contained' >Next</Button>
-          <Typography variant='h6' color={'white'} >Page {pageNumber}</Typography>
-        </Box>
+
+        <Pagination handlePageChange={handlePageChange} pageNumber={pageNumber} />
 
       </Box >
     </>
