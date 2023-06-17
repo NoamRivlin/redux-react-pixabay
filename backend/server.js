@@ -24,8 +24,7 @@ app.use(express.urlencoded({ extended: false }));
 // we set the origin to http://localhost:3000 because that is where our frontend is running
 // we set the methods to GET because we only need to make GET requests to the pixabay API
 app.use(cors({
-    origin: 'http://localhost:3000',
-    methods: ['GET',],
+    methods: ['GET',]
 }));
 // we set the PORT to the BACKEND_PORT environment variable or 4000 if the environment variable is not set
 const PORT = process.env.BACKEND_PORT || 4000
