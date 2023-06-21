@@ -1,5 +1,6 @@
 import { Dialog, DialogContent, Button } from '@mui/material';
-
+import { useDispatch } from 'react-redux';
+import { setCategory, setPageNumber } from '../../features/gallery/gallerySlice';
 const categoryModalStyle = {
     bgcolor: '#0987A0 ',
     borderRadius: '4px',
@@ -13,9 +14,17 @@ const categoryModalStyle = {
 
 const categories = ['Nature', 'Backgrounds', 'Fashion', 'Science', 'Education', 'Feelings', 'Health', 'People', 'Religion', 'Places', 'Animals', 'Industry', 'Computer', 'Food', 'Sports', 'Transportation', 'Travel', 'Buildings', 'Business']
 
-const CategoryModal = ({ categoryModalOpen, setCategoryModalOpen, handleCategoryChange }) => {
+const CategoryModal = ({ categoryModalOpen, setCategoryModalOpen }) => {
     // props are passed from Category.js
     // we use the props to pass the state and event handlers to the components that need them
+    const dispatch = useDispatch();
+
+    const handleCategoryChange = (newCategory) => {
+        // Updates the state of category in the Redux store and resets the page number to 1
+        dispatch(setPageNumber(1))
+        dispatch(setCategory(newCategory))
+    };
+
     return (<Dialog
         // open when the categoryModalOpen state is true
         open={categoryModalOpen}

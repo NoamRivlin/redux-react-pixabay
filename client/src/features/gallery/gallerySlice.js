@@ -6,7 +6,7 @@ const initialState = {
     // app starts loading before app is rendered, so initial loading state is true
     isLoading: true,
     error: null,
-    pageNumber: 56,
+    pageNumber: 1,
     // initial state of category is nature because there's NSFW images in the other categories
     category: 'Nature',
 }

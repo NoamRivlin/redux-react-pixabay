@@ -1,10 +1,23 @@
 import { Box, Button, Typography } from '@mui/material';
 import "./style.css";
+import { useSelector } from 'react-redux';
+import { useState } from 'react';
+import ModalByImageId from './ModalByImageId';
 
 
-const ImageList = ({ images, handleImageModalOpen, isLoading, error }) => {
+const ImageList = () => {
 
-    // console.log(images, 'images');
+    const [imageModalOpen, setImageModalOpen] = useState(false);
+    const [imageModalId, setImageModalId] = useState(null);
+    const handleImageModalOpen = (imageId) => {
+        // Sets the modal image id to the image id that was clicked on 
+        // so that the modal can display the image that was clicked on
+        setImageModalId(imageId);
+        // opens image modal
+        setImageModalOpen(true);
+    };
+    const { images, isLoading, error } = useSelector((state) => state.gallery);
+
     if (isLoading) {
         return (// make it so that the loading text is centered and takes up the same space as the images
             <Box sx={{ height: '600px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -36,6 +49,7 @@ const ImageList = ({ images, handleImageModalOpen, isLoading, error }) => {
                     </Button>
                 </Box>
             ))}
+            <ModalByImageId imageModalOpen={imageModalOpen} setImageModalOpen={setImageModalOpen} imageModalId={imageModalId} />
 
         </Box>
     );
