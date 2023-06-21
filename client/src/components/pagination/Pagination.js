@@ -1,18 +1,22 @@
 import { Box, Button, Typography } from '@mui/material';
 import "./style.css";
 import { useSelector, useDispatch } from 'react-redux';
-import { setPageNumber } from './../../features/gallery/gallerySlice';
+import { fetchImagesAsync, setPageNumber } from './../../features/gallery/gallerySlice';
+import { useEffect } from 'react';
 
 const Pagination = () => {
 
     const dispatch = useDispatch();
 
-    const { pageNumber } = useSelector((state) => state.gallery);
+    const { pageNumber, category } = useSelector((state) => state.gallery);
     const handlePageChange = (newPageNumber) => {
         // Updates the current page number in the Redux store
         dispatch(setPageNumber(newPageNumber))
     };
-
+    useEffect(() => {
+        // we use the useDispatch hook to dispatch actions to the redux store
+        dispatch(fetchImagesAsync({ pageNumber, category }))
+    }, [pageNumber, category]);
 
     return (
         <Box className='pagination' mt={2} >

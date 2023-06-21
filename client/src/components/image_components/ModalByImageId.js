@@ -1,5 +1,6 @@
 import { Dialog, DialogContent } from '@mui/material';
 import "./style.css";
+import { useSelector } from 'react-redux';
 
 
 const imageModalStyle = {
@@ -14,11 +15,13 @@ const imageModalStyle = {
     fontWeight: 'bold',
 }
 
-const ModalByImageId = ({ images, imageModalId, imageModalOpen, setImageModalOpen }) => {
+const ModalByImageId = ({ imageModalOpen, setImageModalOpen, imageModalId }) => {
+
+
     // find the image that matches the image id passed to the modal
+    const { images } = useSelector((state) => state.gallery);
     const image = images.find((image) => image.id === imageModalId);
     // if the image is found display the image modal
-
     return (
         // if the image is found display the image modal
         image &&
