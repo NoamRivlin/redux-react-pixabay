@@ -24,10 +24,7 @@ function App() {
   const [imageModalId, setImageModalId] = useState(null);
 
   // events handlers the change gallery state and trigger useEffect hook to fetch images from the API 
-  const handlePageChange = (newPageNumber) => {
-    // Updates the current page number in the Redux store
-    dispatch(setPageNumber(newPageNumber))
-  };
+
   const handleCategoryChange = (newCategory) => {
     // Updates the state of category in the Redux store and resets the page number to 1
     dispatch(setPageNumber(1))
@@ -75,7 +72,7 @@ function App() {
         <ModalByImageId images={images} imageModalId={imageModalId} imageModalOpen={imageModalOpen} setImageModalOpen={setImageModalOpen} />
 
 
-        <Pagination handlePageChange={handlePageChange} pageNumber={pageNumber} />
+        <Pagination />
 
       </Box >
     </>

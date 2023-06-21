@@ -4,7 +4,7 @@ import "./style.css";
 
 const ImageList = ({ images, handleImageModalOpen, isLoading, error }) => {
 
-    console.log(images, 'images');
+    // console.log(images, 'images');
     if (isLoading) {
         return (// make it so that the loading text is centered and takes up the same space as the images
             <Box sx={{ height: '600px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>

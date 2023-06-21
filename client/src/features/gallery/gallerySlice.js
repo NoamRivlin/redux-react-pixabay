@@ -7,7 +7,7 @@ const initialState = {
     // app starts loading before app is rendered, so initial loading state is true
     isLoading: true,
     error: null,
-    pageNumber: 1,
+    pageNumber: 56,
     // initial state of category is nature because there's NSFW images in the other categories
     category: 'Nature',
 }
@@ -23,6 +23,7 @@ export const fetchImagesAsync = createAsyncThunk('gallery/fetchImages', async ({
         // the component that is subscribed to the state is re-rendered with the new images
 
         const response = await galleryService.fetchImages(pageNumber, category);
+        console.log(response, 'response');
         return response;
 
     } catch (error) {
@@ -30,7 +31,14 @@ export const fetchImagesAsync = createAsyncThunk('gallery/fetchImages', async ({
         // the error message is passed as the action.payload to the reducer
         // the reducer updates the state with the error message
         // rejectWithValue is a helper function that returns a rejected action with the specified value as payload
-        return thunkAPI.rejectWithValue(error.message);
+        // return thunkAPI.rejectWithValue(error.message);
+        const message =
+            (error.response &&
+                error.response.data &&
+                error.response.data.message) ||
+            error.message ||
+            error.toString();
+        return thunkAPI.rejectWithValue(message);
     }
 })
 
@@ -43,11 +51,15 @@ const gallerySlice = createSlice({
         // setPageNumber is a reducer that updates the state with the new page number
         setPageNumber: (state, action) => {
             state.pageNumber = action.payload;
+            if (state.error) {
+                state.error = null
+            }
         },
         // setCategory is a reducer that updates the state with the new category
         setCategory: (state, action) => {
             state.category = action.payload;
         },
+
 
     },
     // extraReducers to update the state asynchronously 
