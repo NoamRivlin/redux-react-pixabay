@@ -22,7 +22,6 @@ export const fetchImagesAsync = createAsyncThunk('gallery/fetchImages', async ({
         // the component that is subscribed to the state is re-rendered with the new images
 
         const response = await galleryService.fetchImages(pageNumber, category);
-        console.log(response, 'response');
         return response;
 
     } catch (error) {
