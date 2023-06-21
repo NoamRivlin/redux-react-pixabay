@@ -17,12 +17,16 @@ const fetchImages = async (pageNumber, category) => {
                 q: category
             }
         });
+        // console.log(response.status, 'response.status');
+        if (response.status !== 200) {
+            throw new Error('Error fetching images');
+        }
         const fetchedImages = response.data;
         return fetchedImages;
 
     } catch (error) {
         console.log('err: ' + error);
-        return error;
+        throw new Error(error.message);
     }
 }
 // galleryService is an object with the fetchImages function
