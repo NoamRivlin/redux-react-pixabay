@@ -8,21 +8,26 @@ console.log(API_URL);
 // it takes the page number and category as params
 // it returns the response from the API
 const fetchImages = async (pageNumber, category) => {
-    // we use axios to fetch images from the API
-    // we pass the page number and category as params to the API
-    const response = await axios.get(API_URL, {
-        params: {
-            page: pageNumber,
-            q: category
+    try {
+        // we use axios to fetch images from the API
+        // we pass the page number and category as params to the API
+        const response = await axios.get(API_URL, {
+            params: {
+                page: pageNumber,
+                q: category
+            }
+        });
+        // console.log(response.status, 'response.status');
+        if (response.status !== 200) {
+            throw new Error('Error fetching images');
         }
-    });
-    // console.log(response.status, 'response.status');
-    // if (response.status !== 200) {
-    //     throw new Error('Error fetching images');
-    // }
-    const fetchedImages = response.data;
-    return fetchedImages;
+        const fetchedImages = response.data;
+        return fetchedImages;
 
+    } catch (error) {
+        console.log('err: ' + error);
+        throw new Error(error.message);
+    }
 }
 // galleryService is an object with the fetchImages function
 const galleryService = { fetchImages };

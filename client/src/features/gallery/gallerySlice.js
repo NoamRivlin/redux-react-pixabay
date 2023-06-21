@@ -1,5 +1,4 @@
 import { createSlice, createAsyncThunk, } from '@reduxjs/toolkit';
-// import { appDispatch, rootState } from '@/app/store.js';
 import galleryService from './galleryService';
 
 const initialState = {
@@ -32,13 +31,8 @@ export const fetchImagesAsync = createAsyncThunk('gallery/fetchImages', async ({
         // the reducer updates the state with the error message
         // rejectWithValue is a helper function that returns a rejected action with the specified value as payload
         // return thunkAPI.rejectWithValue(error.message);
-        const message =
-            (error.response &&
-                error.response.data &&
-                error.response.data.message) ||
-            error.message ||
-            error.toString();
-        return thunkAPI.rejectWithValue(message);
+        return thunkAPI.rejectWithValue(error.message);
+
     }
 })
 
